@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// ========================= PAYMENT CLASS =========================
+// ========================= PAYMENT CLASS ========================= 
 class Payment
 {
 private:
