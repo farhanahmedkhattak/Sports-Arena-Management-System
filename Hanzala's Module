@@ -1,0 +1,290 @@
+import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+// Ye base class hai jo common information store karti hai
+class Person {
+
+    // Encapsulation: private variables (data hiding ke liye)
+    private String name;
+    private int age;
+    private String contactNo;
+    private String email;
+
+    // Constructor: jab object banega to initial values set hongi
+    Person(String name, int age, String contactNo, String email) {
+        this.name = name;
+        this.age = age;
+        this.contactNo = contactNo;
+        this.email = email;
+    }
+
+    // setInfo: values update karne ke liye function
+    void setInfo(String name, int age, String contactNo, String email) {
+        this.name = name;
+        this.age = age;
+        this.contactNo = contactNo;
+        this.email = email;
+    }
+
+    // getInfo: saari person ki information return karta hai
+    String getInfo() {
+        return "Name: " + name +
+               "\nAge: " + age +
+               "\nContact: " + contactNo +
+               "\nEmail: " + email + "\n";
+    }
+
+    // login function: dummy login action show karta hai
+    void login() {
+        System.out.println(name + " logged in SUCCESSFULLY!.");
+    }
+
+    // logout function: dummy logout action show karta hai
+    void logout() {
+        System.out.println(name + " logout Successful!.");
+    }
+}
+
+
+// Player class Person ko inherit kar rahi hai
+class Player extends Person {
+
+    private String team;
+    private String schedule;
+    private String stats;
+
+    // Constructor: player ki initial info set hoti hai
+    Player(String name, int age, String contactNo, String email, String team) {
+        super(name, age, contactNo, email); // parent class call
+        this.team = team;
+        this.schedule = "No schedule assigned";
+        this.stats = "No stats available";
+    }
+
+    // registerForEvent: player ko event mein register karta hai
+    void registerForEvent(String event) {
+        schedule = "Registered for: " + event;
+    }
+
+    // viewSchedule: player ka schedule return karta hai
+    String viewSchedule() {
+        return schedule;
+    }
+
+    // updateStats: player ki performance update karta hai
+    void updateStats(String stats) {
+        this.stats = stats;
+    }
+
+    // joinTeam: player ki team change krny ke liye hai
+    void joinTeam(String team) {
+        this.team = team;
+    }
+
+    // player ki complete info return karta hai
+    String getPlayerInfo() {
+        return getInfo() +
+               "Team: " + team +
+               "\nSchedule: " + schedule +
+               "\nStats: " + stats + "\n";
+    }
+}
+
+// ================= COACH CLASS =================
+// Coach class bhi Person ko inherit karti hai
+class Coach extends Person {
+
+    private String specialization;
+    private String schedule;
+    private String evaluation;
+
+    // Constructor: coach ki info set hoti hai
+    Coach(String name, int age, String contactNo, String email, String specialization) {
+        super(name, age, contactNo, email);
+        this.specialization = specialization;
+        this.schedule = "No schedule created";
+        this.evaluation = "No evaluation yet";
+    }
+
+    // trainPlayers: training session show karta hai
+    void trainPlayers(String training) {
+        System.out.println("Training chal rahi hai: " + training);
+    }
+
+    // evaluatePerformance: players ki performance check karta hai
+    void evaluatePerformance(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    // createSchedule: coach ka schedule set karta hai
+    void createSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    // assignDrill: drill assign karta hai players ko
+    void assignDrill(String drill) {
+        System.out.println("Drill assign kiya gaya: " + drill);
+    }
+
+    // coach ki full info return karta hai
+    String getCoachInfo() {
+        return getInfo() +
+               "Specialization: " + specialization +
+               "\nSchedule: " + schedule +
+               "\nEvaluation: " + evaluation + "\n";
+    }
+}
+
+// ================= GUI CLASS =================
+// Ye main GUI system hai jahan buttons aur interface bana hai
+public class SportsSystemGUI extends JFrame implements ActionListener {
+
+    ArrayList<Player> players = new ArrayList<Player>();
+    ArrayList<Coach> coaches = new ArrayList<Coach>();
+
+    JButton addPlayerBtn, viewPlayerBtn;
+    JButton addCoachBtn, viewCoachBtn;
+    JButton playerActionBtn, coachActionBtn;
+    JButton exitBtn;
+
+    JTextArea output;
+
+    // Constructor: GUI initialize karta hai
+    SportsSystemGUI() {
+
+        setTitle("Player & Coach Module");
+        setSize(750, 550);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel(new GridLayout(2, 4, 10, 10));
+
+        addPlayerBtn = new JButton("Add Player");
+        viewPlayerBtn = new JButton("View Players");
+        addCoachBtn = new JButton("Add Coach");
+        viewCoachBtn = new JButton("View Coaches");
+        playerActionBtn = new JButton("Player Action");
+        coachActionBtn = new JButton("Coach Action");
+        exitBtn = new JButton("Exit");
+
+        panel.add(addPlayerBtn);
+        panel.add(viewPlayerBtn);
+        panel.add(addCoachBtn);
+        panel.add(viewCoachBtn);
+        panel.add(playerActionBtn);
+        panel.add(coachActionBtn);
+        panel.add(exitBtn);
+
+        output = new JTextArea();
+        output.setEditable(false);
+
+        add(panel, BorderLayout.NORTH);
+        add(new JScrollPane(output), BorderLayout.CENTER);
+
+        addPlayerBtn.addActionListener(this);
+        viewPlayerBtn.addActionListener(this);
+        addCoachBtn.addActionListener(this);
+        viewCoachBtn.addActionListener(this);
+        playerActionBtn.addActionListener(this);
+        coachActionBtn.addActionListener(this);
+        exitBtn.addActionListener(this);
+
+        setVisible(true);
+    }
+
+    // Action handler: buttons ke actions control karta hai
+    public void actionPerformed(ActionEvent e) {
+
+        // PLAYER ADD KARNA
+        if (e.getSource() == addPlayerBtn) {
+
+            String name = JOptionPane.showInputDialog("Player ka naam:");
+            int age = Integer.parseInt(JOptionPane.showInputDialog("Age:"));
+            String contact = JOptionPane.showInputDialog("Contact:");
+            String email = JOptionPane.showInputDialog("Email:");
+            String team = JOptionPane.showInputDialog("Team:");
+
+            players.add(new Player(name, age, contact, email, team));
+
+            output.setText("Player added!");
+        }
+
+        // PLAYERS SHOW KARNA
+        else if (e.getSource() == viewPlayerBtn) {
+
+            output.setText("");
+
+            for (int i = 0; i < players.size(); i++) {
+                output.append("\n--- Player " + (i + 1) + " ---\n");
+                output.append(players.get(i).getPlayerInfo());
+            }
+        }
+
+        // COACH ADD KARNA
+        else if (e.getSource() == addCoachBtn) {
+
+            String name = JOptionPane.showInputDialog("Coach ka naam:");
+            int age = Integer.parseInt(JOptionPane.showInputDialog("Age:"));
+            String contact = JOptionPane.showInputDialog("Contact:");
+            String email = JOptionPane.showInputDialog("Email:");
+            String spec = JOptionPane.showInputDialog("Specialization:");
+
+            coaches.add(new Coach(name, age, contact, email, spec));
+
+            output.setText("Coach added!");
+        }
+
+        // COACHES SHOW KARNA
+        else if (e.getSource() == viewCoachBtn) {
+
+            output.setText("");
+
+            for (int i = 0; i < coaches.size(); i++) {
+                output.append("\n--- Coach " + (i + 1) + " ---\n");
+                output.append(coaches.get(i).getCoachInfo());
+            }
+        }
+
+        // PLAYER ACTIONS
+        else if (e.getSource() == playerActionBtn) {
+
+            int index = Integer.parseInt(JOptionPane.showInputDialog("Player number:")) - 1;
+
+            String event = JOptionPane.showInputDialog("Event:");
+            String stats = JOptionPane.showInputDialog("Stats:");
+
+            players.get(index).registerForEvent(event);
+            players.get(index).updateStats(stats);
+
+            output.setText("Player updated");
+        }
+
+        // COACH ACTIONS
+        else if (e.getSource() == coachActionBtn) {
+
+            int index = Integer.parseInt(JOptionPane.showInputDialog("Coach number:")) - 1;
+
+            String schedule = JOptionPane.showInputDialog("Schedule:");
+            String eval = JOptionPane.showInputDialog("Evaluation:");
+
+            coaches.get(index).createSchedule(schedule);
+            coaches.get(index).evaluatePerformance(eval);
+            coaches.get(index).assignDrill("Basic Drill");
+            coaches.get(index).trainPlayers("Training session start");
+
+            output.setText("Coach updated");
+        }
+
+        // EXIT
+        else if (e.getSource() == exitBtn) {
+            System.exit(0);
+        }
+    }
+
+    // Main method: program yahan se start hota hai
+    public static void main(String[] args) {
+        new SportsSystemGUI();
+    }
+}
