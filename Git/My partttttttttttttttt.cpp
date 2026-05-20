@@ -1,15 +1,3 @@
-#include<iostream>
-using namespace std;
-int main() {    
-    cout << "Hello World!" << endl; 
-    cout<<"Hello world: ";
-    out<<"Welcome to C++ programming."<<endl;
-    cout<<"another line is added:";
-    cout<<"This is a new line added to the code."<<endl;
-    cout<<"This line is added to test the git pull command."<<endl;
-    return 0; 
-}   
-//jjj
 // helooo
 #include <iostream>
 #include <vector>
